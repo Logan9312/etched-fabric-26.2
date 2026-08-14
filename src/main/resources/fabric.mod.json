@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "etched",
+  "version": "${version}",
+  "name": "Etched Fabric",
+  "description": "A private Fabric 26.2 port of Etched 5.1.0.",
+  "authors": ["Ocelot", "Jackson", "Farcr (Art)", "AstraZoey (Sound Design)"],
+  "contributors": ["Logan9312 (Fabric 26.2 port)"],
+  "contact": {
+    "sources": "https://github.com/Logan9312/etched-fabric-26.2",
+    "issues": "https://github.com/Logan9312/etched-fabric-26.2/issues"
+  },
+  "license": "LicenseRef-Etched-Mixed",
+  "icon": "etched.icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["gg.moonflower.etched.core.fabric.EtchedFabric"],
+    "client": ["gg.moonflower.etched.core.fabric.EtchedFabricClient"]
+  },
+  "mixins": ["etched.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "fabric-api": "*",
+    "java": ">=25",
+    "minecraft": "~26.2"
+  }
+}
