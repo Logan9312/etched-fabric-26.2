@@ -6,6 +6,7 @@ import gg.moonflower.etched.core.Etched;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.item.ItemStack;
@@ -26,18 +27,25 @@ public record ClientboundPlayBlockMusicPacket(ItemStack record, BlockPos pos, @N
     public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundPlayBlockMusicPacket> CODEC = StreamCodec.of((buf, packet) -> {
         ItemStack.STREAM_CODEC.encode(buf, packet.record);
         buf.writeBlockPos(packet.pos);
-        if (Etched.SOPHSTICATED_CORE_LOADED) {
-            buf.writeBoolean(packet.storageId != null);
-            if (packet.storageId != null) {
-                buf.writeUUID(packet.storageId);
-            }
-        }
+        writeStorageId(buf, packet.storageId);
     }, buf -> {
         ItemStack record = ItemStack.STREAM_CODEC.decode(buf);
         BlockPos pos = buf.readBlockPos();
-        UUID storageId = Etched.SOPHSTICATED_CORE_LOADED && buf.readBoolean() ? buf.readUUID() : null;
+        UUID storageId = readStorageId(buf);
         return new ClientboundPlayBlockMusicPacket(record, pos, storageId);
     });
+
+    static void writeStorageId(FriendlyByteBuf buf, @Nullable UUID storageId) {
+        buf.writeBoolean(storageId != null);
+        if (storageId != null) {
+            buf.writeUUID(storageId);
+        }
+    }
+
+    @Nullable
+    static UUID readStorageId(FriendlyByteBuf buf) {
+        return buf.readBoolean() ? buf.readUUID() : null;
+    }
 
     @Override
     public Type<? extends CustomPacketPayload> type() {

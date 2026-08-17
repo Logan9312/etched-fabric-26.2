@@ -1,5 +1,6 @@
 package gg.moonflower.etched.common.network;
 
+import gg.moonflower.etched.common.network.play.ClientboundConfigPacket;
 import gg.moonflower.etched.common.network.play.ClientboundInvalidEtchUrlPacket;
 import gg.moonflower.etched.common.network.play.ClientboundPlayBlockMusicPacket;
 import gg.moonflower.etched.common.network.play.ClientboundPlayEntityMusicPacket;
@@ -8,8 +9,10 @@ import gg.moonflower.etched.common.network.play.SetAlbumJukeboxTrackPacket;
 import gg.moonflower.etched.common.network.play.SetUrlPacket;
 import gg.moonflower.etched.common.network.play.handler.EtchedClientPlayPacketHandler;
 import gg.moonflower.etched.common.network.play.handler.EtchedServerPlayPacketHandler;
+import gg.moonflower.etched.core.Etched;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public final class EtchedMessages {
@@ -26,6 +29,7 @@ public final class EtchedMessages {
         commonInitialized = true;
 
         PayloadTypeRegistry.clientboundPlay().register(ClientboundInvalidEtchUrlPacket.TYPE, ClientboundInvalidEtchUrlPacket.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(ClientboundConfigPacket.TYPE, ClientboundConfigPacket.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(ClientboundPlayBlockMusicPacket.TYPE, ClientboundPlayBlockMusicPacket.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(ClientboundPlayEntityMusicPacket.TYPE, ClientboundPlayEntityMusicPacket.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(SetAlbumJukeboxTrackPacket.TYPE, SetAlbumJukeboxTrackPacket.CODEC);
@@ -41,6 +45,9 @@ public final class EtchedMessages {
                 (packet, context) -> EtchedServerPlayPacketHandler.handleSetAlbumJukeboxTrack(packet, context::player));
         ServerPlayNetworking.registerGlobalReceiver(SetUrlPacket.TYPE,
                 (packet, context) -> EtchedServerPlayPacketHandler.handleSetUrl(packet, context::player));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> sender.sendPacket(new ClientboundConfigPacket(
+                Etched.SERVER_CONFIG.useBoomboxMenu.get(),
+                Etched.SERVER_CONFIG.useAlbumCoverMenu.get())));
     }
 
     public static synchronized void initClient() {
@@ -51,6 +58,10 @@ public final class EtchedMessages {
 
         ClientPlayNetworking.registerGlobalReceiver(ClientboundInvalidEtchUrlPacket.TYPE,
                 (packet, context) -> EtchedClientPlayPacketHandler.handleSetInvalidEtch(packet, context::player));
+        ClientPlayNetworking.registerGlobalReceiver(ClientboundConfigPacket.TYPE, (packet, context) -> context.client().execute(() -> {
+            Etched.CLIENT_SERVER_CONFIG.useBoomboxMenu.set(packet.useBoomboxMenu());
+            Etched.CLIENT_SERVER_CONFIG.useAlbumCoverMenu.set(packet.useAlbumCoverMenu());
+        }));
         ClientPlayNetworking.registerGlobalReceiver(ClientboundPlayBlockMusicPacket.TYPE,
                 (packet, context) -> EtchedClientPlayPacketHandler.handlePlayBlockMusicPacket(packet, context::player));
         ClientPlayNetworking.registerGlobalReceiver(ClientboundPlayEntityMusicPacket.TYPE,

@@ -1,1 +1,46 @@
-{"model":{"type":"minecraft:model","model":"etched:item/etched_music_disc/flat"}}
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "etched:disc_pattern",
+    "cases": [
+      { "when": "flat", "model": { "type": "minecraft:model", "model": "etched:item/etched_music_disc/flat", "tints": [
+        { "type": "etched:disc_appearance", "layer": 0 },
+        { "type": "etched:disc_appearance", "layer": 1 },
+        { "type": "etched:disc_appearance", "layer": 2 }
+      ] } },
+      { "when": "cross", "model": { "type": "minecraft:model", "model": "etched:item/etched_music_disc/cross", "tints": [
+        { "type": "etched:disc_appearance", "layer": 0 },
+        { "type": "etched:disc_appearance", "layer": 1 },
+        { "type": "etched:disc_appearance", "layer": 2 }
+      ] } },
+      { "when": "eye", "model": { "type": "minecraft:model", "model": "etched:item/etched_music_disc/eye", "tints": [
+        { "type": "etched:disc_appearance", "layer": 0 },
+        { "type": "etched:disc_appearance", "layer": 1 },
+        { "type": "etched:disc_appearance", "layer": 2 }
+      ] } },
+      { "when": "parallel", "model": { "type": "minecraft:model", "model": "etched:item/etched_music_disc/parallel", "tints": [
+        { "type": "etched:disc_appearance", "layer": 0 },
+        { "type": "etched:disc_appearance", "layer": 1 },
+        { "type": "etched:disc_appearance", "layer": 2 }
+      ] } },
+      { "when": "star", "model": { "type": "minecraft:model", "model": "etched:item/etched_music_disc/star", "tints": [
+        { "type": "etched:disc_appearance", "layer": 0 },
+        { "type": "etched:disc_appearance", "layer": 1 },
+        { "type": "etched:disc_appearance", "layer": 2 }
+      ] } },
+      { "when": "gold", "model": { "type": "minecraft:model", "model": "etched:item/etched_music_disc/gold", "tints": [
+        { "type": "etched:disc_appearance", "layer": 0 },
+        { "type": "etched:disc_appearance", "layer": 1 }
+      ] } }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "etched:item/etched_music_disc/flat",
+      "tints": [
+        { "type": "etched:disc_appearance", "layer": 0 },
+        { "type": "etched:disc_appearance", "layer": 1 },
+        { "type": "etched:disc_appearance", "layer": 2 }
+      ]
+    }
+  }
+}

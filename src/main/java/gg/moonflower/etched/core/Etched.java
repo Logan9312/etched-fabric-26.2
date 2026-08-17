@@ -14,7 +14,6 @@ import gg.moonflower.etched.core.registry.EtchedMenus;
 import gg.moonflower.etched.core.registry.EtchedRecipes;
 import gg.moonflower.etched.core.registry.EtchedSounds;
 import gg.moonflower.etched.core.registry.EtchedVillagers;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.cauldron.CauldronInteractions;
 import net.minecraft.core.cauldron.EtchedCauldronAccess;
@@ -31,9 +30,10 @@ import org.slf4j.Logger;
 public final class Etched {
     public static final String MOD_ID = "etched";
     public static final Logger LOGGER = LogUtils.getLogger();
-    public static final boolean SOPHSTICATED_CORE_LOADED = FabricLoader.getInstance().isModLoaded("sophisticatedcore");
     public static final EtchedConfig.Client CLIENT_CONFIG = new EtchedConfig.Client();
     public static final EtchedConfig.Server SERVER_CONFIG = new EtchedConfig.Server();
+    /** Client-side view of the current server's synchronized settings. Never used by the logical server. */
+    public static final EtchedConfig.Server CLIENT_SERVER_CONFIG = new EtchedConfig.Server();
 
     private static boolean initialized;
 
@@ -49,6 +49,9 @@ public final class Etched {
             return;
         }
         initialized = true;
+
+        EtchedConfig.load(CLIENT_CONFIG, SERVER_CONFIG);
+        CLIENT_SERVER_CONFIG.copyFrom(SERVER_CONFIG);
 
         EtchedComponents.REGISTRY.registerAll();
         EtchedBlocks.BLOCKS.registerAll();

@@ -34,7 +34,7 @@ public class AlbumCoverItem extends Item implements ContainerItem {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        if (!Etched.SERVER_CONFIG.useAlbumCoverMenu.get()) {
+        if (!(level.isClientSide() ? Etched.CLIENT_SERVER_CONFIG : Etched.SERVER_CONFIG).useAlbumCoverMenu.get()) {
             if (player.isSecondaryUseActive()) {
                 if (dropContents(stack, player)) {
                     this.playDropContentsSound(player);
@@ -56,7 +56,7 @@ public class AlbumCoverItem extends Item implements ContainerItem {
 
     @Override
     public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction clickAction, Player player) {
-        if (Etched.SERVER_CONFIG.useAlbumCoverMenu.get()) {
+        if ((player.level().isClientSide() ? Etched.CLIENT_SERVER_CONFIG : Etched.SERVER_CONFIG).useAlbumCoverMenu.get()) {
             return false;
         }
         if (clickAction != ClickAction.SECONDARY) {
@@ -91,7 +91,7 @@ public class AlbumCoverItem extends Item implements ContainerItem {
 
     @Override
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack clickItem, Slot slot, ClickAction clickAction, Player player, SlotAccess access) {
-        if (Etched.SERVER_CONFIG.useAlbumCoverMenu.get()) {
+        if ((player.level().isClientSide() ? Etched.CLIENT_SERVER_CONFIG : Etched.SERVER_CONFIG).useAlbumCoverMenu.get()) {
             return false;
         }
         if (clickAction != ClickAction.SECONDARY) {

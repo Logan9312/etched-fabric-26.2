@@ -1,1 +1,9 @@
-{"model":{"type":"minecraft:model","model":"etched:item/etched_album_cover/default"}}
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "etched:item/etched_album_cover/default",
+    "model": {
+      "type": "etched:album_cover"
+    }
+  }
+}

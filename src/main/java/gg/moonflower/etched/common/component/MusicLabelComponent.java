@@ -32,7 +32,8 @@ public record MusicLabelComponent(String artist, String title, int primaryColor,
             Codec.STRING.fieldOf("title").forGetter(MusicLabelComponent::title),
             Codec.INT.fieldOf("color").forGetter(MusicLabelComponent::primaryColor)
     ).apply(instance, MusicLabelComponent::new));
-    public static final Codec<MusicLabelComponent> CODEC = Codec.withAlternative(SIMPLE_CODEC, COMPLEX_CODEC);
+    // Encode the complete representation first while retaining the legacy one-color form as a decoder fallback.
+    public static final Codec<MusicLabelComponent> CODEC = Codec.withAlternative(COMPLEX_CODEC, SIMPLE_CODEC);
     public static final StreamCodec<FriendlyByteBuf, MusicLabelComponent> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8,
             MusicLabelComponent::artist,

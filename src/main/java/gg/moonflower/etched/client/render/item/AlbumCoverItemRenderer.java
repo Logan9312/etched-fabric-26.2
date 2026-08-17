@@ -28,7 +28,16 @@ public final class AlbumCoverItemRenderer {
         if (overlay == null) {
             overlay = loadOverlay();
         }
-        return overlay;
+        NativeImage copy = new NativeImage(overlay.getWidth(), overlay.getHeight(), true);
+        copy.copyFrom(overlay);
+        return copy;
+    }
+
+    public static synchronized void clearOverlay() {
+        if (overlay != null) {
+            overlay.close();
+            overlay = null;
+        }
     }
 
     private static NativeImage loadOverlay() {
