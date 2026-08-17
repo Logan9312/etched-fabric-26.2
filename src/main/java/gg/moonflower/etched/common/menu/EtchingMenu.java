@@ -43,8 +43,8 @@ import java.util.regex.Pattern;
  */
 public class EtchingMenu extends AbstractContainerMenu implements UrlMenu {
 
-    public static final Identifier EMPTY_SLOT_MUSIC_DISC = Etched.etchedPath("item/empty_etching_table_slot_music_disc");
-    public static final Identifier EMPTY_SLOT_MUSIC_LABEL = Etched.etchedPath("item/empty_etching_table_slot_music_label");
+    public static final Identifier EMPTY_SLOT_MUSIC_DISC = Etched.etchedPath("container/slot/empty_etching_table_slot_music_disc");
+    public static final Identifier EMPTY_SLOT_MUSIC_LABEL = Etched.etchedPath("container/slot/empty_etching_table_slot_music_label");
     private static final Pattern CONTENT_TYPE_PATTERN = Pattern.compile("\\s*;\\s*");
     private static final Cache<String, CompletableFuture<TrackData[]>> DATA_CACHE = CacheBuilder.newBuilder().expireAfterWrite(15, TimeUnit.MINUTES).build();
     private static final boolean IGNORE_CACHE = false;
