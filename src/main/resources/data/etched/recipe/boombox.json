@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "I": {
-      "tag": "c:ingots/copper"
-    },
-    "J": {
-      "item": "minecraft:jukebox"
-    },
-    "R": {
-      "tag": "c:dusts/redstone"
-    }
+    "I": "#c:ingots/copper",
+    "J": "minecraft:jukebox",
+    "R": "#c:dusts/redstone"
   },
   "pattern": [
     " I ",
