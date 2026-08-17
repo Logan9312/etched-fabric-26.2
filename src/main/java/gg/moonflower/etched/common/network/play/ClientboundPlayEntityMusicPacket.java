@@ -1,6 +1,7 @@
 package gg.moonflower.etched.common.network.play;
 
 import gg.moonflower.etched.core.Etched;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -23,19 +24,29 @@ public record ClientboundPlayEntityMusicPacket(Action action, ItemStack record, 
             ItemStack.STREAM_CODEC.encode(buf, packet.record);
         }
         buf.writeVarInt(packet.entityId);
-        if (packet.action != Action.STOP && Etched.SOPHSTICATED_CORE_LOADED) {
-            buf.writeBoolean(packet.storageId != null);
-            if (packet.storageId != null) {
-                buf.writeUUID(packet.storageId);
-            }
-        }
+        writeStorageId(buf, packet.action, packet.storageId);
     }, buf -> {
         Action action = buf.readEnum(Action.class);
         ItemStack record = action == Action.STOP ? ItemStack.EMPTY : ItemStack.STREAM_CODEC.decode(buf);
         int entityId = buf.readVarInt();
-        UUID storageId = action != Action.STOP && buf.readBoolean() && Etched.SOPHSTICATED_CORE_LOADED ? buf.readUUID() : null;
+        UUID storageId = readStorageId(buf, action);
         return new ClientboundPlayEntityMusicPacket(action, record, entityId, storageId);
     });
+
+    static void writeStorageId(FriendlyByteBuf buf, Action action, @Nullable UUID storageId) {
+        if (action == Action.STOP) {
+            return;
+        }
+        buf.writeBoolean(storageId != null);
+        if (storageId != null) {
+            buf.writeUUID(storageId);
+        }
+    }
+
+    @Nullable
+    static UUID readStorageId(FriendlyByteBuf buf, Action action) {
+        return action != Action.STOP && buf.readBoolean() ? buf.readUUID() : null;
+    }
 
     public ClientboundPlayEntityMusicPacket(ItemStack record, Entity entity, boolean restart, @Nullable UUID storageId) {
         this(restart ? Action.RESTART : Action.START, record, entity.getId(), storageId);

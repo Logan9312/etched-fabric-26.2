@@ -41,6 +41,26 @@ dependencies {
 	implementation "org.apache.commons:commons-lang3:3.17.0"
 }
 
+tasks.register('parityTest', JavaExec) {
+	group = 'verification'
+	description = 'Runs lightweight codec regression checks that do not require a game instance.'
+	dependsOn testClasses
+	classpath = sourceSets.test.runtimeClasspath
+	mainClass = 'gg.moonflower.etched.common.network.play.PacketCodecParityCheck'
+	systemProperty 'etched.projectDir', project.projectDir.absolutePath
+	def parityWorkDir = layout.buildDirectory.dir('parity-test')
+	doFirst {
+		parityWorkDir.get().asFile.mkdirs()
+		workingDir parityWorkDir
+	}
+}
+
+test {
+	failOnNoDiscoveredTests = false
+}
+
+check.dependsOn parityTest
+
 processResources {
 	def version = project.version
 	inputs.property "version", version

@@ -120,8 +120,10 @@ public final class AlbumCoverCache {
                 throw new CompletionException(e);
             }
         }, Util.nonCriticalIoPool()).thenApplyAsync(path -> {
-            try (FileInputStream is = new FileInputStream(path.toFile()); NativeImage image = read(is)) {
-                return AlbumCover.of(AlbumImageProcessor.apply(image, AlbumCoverItemRenderer.getOverlayImage()));
+            try (FileInputStream is = new FileInputStream(path.toFile());
+                 NativeImage image = read(is);
+                 NativeImage overlay = AlbumCoverItemRenderer.getOverlayImage()) {
+                return AlbumCover.of(AlbumImageProcessor.apply(image, overlay));
             } catch (Exception e) {
                 throw new CompletionException(e);
             }

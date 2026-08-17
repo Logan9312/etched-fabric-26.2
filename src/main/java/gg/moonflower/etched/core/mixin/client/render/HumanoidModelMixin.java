@@ -26,8 +26,6 @@ public class HumanoidModelMixin<T extends HumanoidRenderState> {
     @Shadow
     public ModelPart rightArm;
 
-    // TODO: fix arm swing when holding a boombox
-
     @Unique
     private static @Nullable HumanoidArm etched$getPlayingArm(HumanoidRenderState state) {
         if (BoomboxItem.hasRecord(state.rightHandItemStack) && !state.rightHandItemStack.has(EtchedComponents.PAUSED.get())) {
@@ -57,6 +55,20 @@ public class HumanoidModelMixin<T extends HumanoidRenderState> {
             this.leftArm.yRot = 0.0F;
             this.leftArm.zRot = 0.610865F;
             ci.cancel();
+        }
+    }
+
+    @Inject(method = "setupAttackAnimation", at = @At("RETURN"))
+    public void etched$restoreBoomboxArmAfterAttack(T state, CallbackInfo ci) {
+        HumanoidArm arm = etched$getPlayingArm(state);
+        if (arm == HumanoidArm.RIGHT) {
+            this.rightArm.xRot = (float) Math.PI;
+            this.rightArm.yRot = 0.0F;
+            this.rightArm.zRot = -0.610865F;
+        } else if (arm == HumanoidArm.LEFT) {
+            this.leftArm.xRot = (float) Math.PI;
+            this.leftArm.yRot = 0.0F;
+            this.leftArm.zRot = 0.610865F;
         }
     }
 

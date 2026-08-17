@@ -2,13 +2,10 @@ package gg.moonflower.etched.common.recipe;
 
 import gg.moonflower.etched.core.registry.EtchedItems;
 import gg.moonflower.etched.core.registry.EtchedRecipes;
+import gg.moonflower.etched.core.registry.EtchedTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.tags.TagKey;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.CraftingRecipe;
@@ -16,8 +13,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class MusicDiscCloningRecipe extends CustomRecipe {
-    private static final TagKey<Item> MUSIC_DISCS = TagKey.create(Registries.ITEM, Identifier.withDefaultNamespace("music_discs"));
-
     public MusicDiscCloningRecipe() {
     }
 
@@ -32,7 +27,7 @@ public class MusicDiscCloningRecipe extends CustomRecipe {
                 continue;
             }
 
-            if (stack.is(MUSIC_DISCS)) {
+            if (stack.is(EtchedTags.MUSIC_DISCS)) {
                 if (!base.isEmpty()) {
                     return false;
                 }
@@ -64,7 +59,7 @@ public class MusicDiscCloningRecipe extends CustomRecipe {
                 continue;
             }
 
-            if (stack.is(MUSIC_DISCS)) {
+            if (stack.is(EtchedTags.MUSIC_DISCS)) {
                 if (!base.isEmpty()) {
                     return ItemStack.EMPTY;
                 }

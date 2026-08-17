@@ -3,6 +3,7 @@ package gg.moonflower.etched.common.component;
 import net.minecraft.core.component.DataComponentGetter;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import gg.moonflower.etched.core.Etched;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
@@ -18,7 +19,9 @@ public enum PausedComponent implements TooltipProvider {
 
     INSTANCE;
 
-    public static final Codec<PausedComponent> CODEC = Codec.BOOL.xmap(ignored -> INSTANCE, ignored -> true);
+    public static final Codec<PausedComponent> CODEC = Codec.withAlternative(
+            MapCodec.unit(INSTANCE).codec(),
+            Codec.BOOL.xmap(ignored -> INSTANCE, ignored -> true));
     public static final StreamCodec<ByteBuf, PausedComponent> STREAM_CODEC = StreamCodec.unit(INSTANCE);
     private static final Component TOOLTIP = Component.translatable("item." + Etched.MOD_ID + ".boombox.paused").withStyle(ChatFormatting.YELLOW);
 

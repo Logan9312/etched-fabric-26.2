@@ -103,7 +103,7 @@ public class BoomboxItem extends Item implements ContainerItem {
             }
             return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
-        if (!Etched.SERVER_CONFIG.useBoomboxMenu.get()) {
+        if (!(level.isClientSide() ? Etched.CLIENT_SERVER_CONFIG : Etched.SERVER_CONFIG).useBoomboxMenu.get()) {
             return InteractionResult.FAIL;
         }
         return this.use(this, level, player, hand);
@@ -116,7 +116,7 @@ public class BoomboxItem extends Item implements ContainerItem {
 
     @Override
     public boolean overrideStackedOnOther(ItemStack boombox, Slot slot, ClickAction clickAction, Player player) {
-        if (Etched.SERVER_CONFIG.useBoomboxMenu.get()) {
+        if ((player.level().isClientSide() ? Etched.CLIENT_SERVER_CONFIG : Etched.SERVER_CONFIG).useBoomboxMenu.get()) {
             return false;
         }
         if (clickAction != ClickAction.SECONDARY) {
@@ -144,7 +144,7 @@ public class BoomboxItem extends Item implements ContainerItem {
 
     @Override
     public boolean overrideOtherStackedOnMe(ItemStack boombox, ItemStack clickItem, Slot slot, ClickAction clickAction, Player player, SlotAccess slotAccess) {
-        if (Etched.SERVER_CONFIG.useBoomboxMenu.get()) {
+        if ((player.level().isClientSide() ? Etched.CLIENT_SERVER_CONFIG : Etched.SERVER_CONFIG).useBoomboxMenu.get()) {
             return false;
         }
         if (clickAction != ClickAction.SECONDARY) {
