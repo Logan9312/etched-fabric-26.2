@@ -60,7 +60,7 @@ public class EtchedBlocks {
      * @return The registered block
      */
     private static <R extends Block> DeferredBlock<R> registerWithItem(String id, Supplier<R> block, Item.Properties properties) {
-        properties.setId(itemKey(id));
+        properties.useBlockDescriptionPrefix().setId(itemKey(id));
         return registerWithItem(id, block, object -> new BlockItem(object, properties));
     }
 

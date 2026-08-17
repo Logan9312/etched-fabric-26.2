@@ -6,7 +6,7 @@ This repository targets behavioral parity with the upstream NeoForge release. Th
 
 ## Status
 
-`alpha.1` is a private integration-test build. It compiles, packages, passes Fabric's
+`alpha.2` is a private integration-test build. It compiles, packages, passes Fabric's
 dedicated-server bootstrap, and reaches the Minecraft client main menu with its resource
 pack and audio engine loaded. Core blocks, items, menus, components, recipes, networking,
 streaming sources, caches, jukebox integration, boombox, radio, album jukebox, and minecart
