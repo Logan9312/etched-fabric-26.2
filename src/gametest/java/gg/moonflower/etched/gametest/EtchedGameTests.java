@@ -1,6 +1,7 @@
 package gg.moonflower.etched.gametest;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import net.fabricmc.fabric.api.gametest.v1.CustomTestMethodInvoker;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
@@ -42,7 +43,10 @@ public final class EtchedGameTests implements CustomTestMethodInvoker {
 
 	@GameTest(maxTicks = 160)
 	public void villagerPopulationSurvivesExtendedAiTicks(GameTestHelper helper) {
-		var villagers = helper.spawn(EntityTypes.VILLAGER, new BlockPos(1, 1, 1), 32);
+		var villagers = new ArrayList<Villager>(32);
+		for (int index = 0; index < 32; index++) {
+			villagers.add(helper.spawn(EntityTypes.VILLAGER, 1 + index % 8, 1, 1 + index / 8));
+		}
 		helper.runAfterDelay(100, () -> {
 			long survivors = villagers.stream().filter(Villager::isAlive).count();
 			helper.assertTrue(survivors == villagers.size(),
