@@ -6,6 +6,9 @@
 name: build
 on: [pull_request, push]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -23,8 +26,54 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
+      - name: capture failed test reports
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: Server-test-reports
+          path: |
+            build/reports/
+            build/test-results/
+            build/run/gameTest/logs/
       - name: capture build artifacts
         uses: actions/upload-artifact@v7
         with:
           name: Artifacts
           path: build/libs/
+
+  client_game_test:
+    name: Client mixins and resources
+    needs: build
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, Linux, X64, etched-ci]
+    timeout-minutes: 20
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v6
+      - name: validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v6
+      - name: setup jdk
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'microsoft'
+          cache: gradle
+      - name: install headless graphics support
+        run: |
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            apt-get update
+            DEBIAN_FRONTEND=noninteractive apt-get install -y xvfb xauth libgl1 libglx-mesa0 libasound2t64
+          fi
+      - name: make gradle wrapper executable
+        run: chmod +x ./gradlew
+      - name: run production client game tests
+        run: ./gradlew runProductionClientGameTest
+      - name: capture client test evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: Client-game-test-evidence
+          if-no-files-found: warn
+          path: |
+            build/run/clientGameTest/screenshots/
+            build/run/clientGameTest/logs/

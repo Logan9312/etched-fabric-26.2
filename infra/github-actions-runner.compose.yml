@@ -1,0 +1,46 @@
+services:
+  runner-1:
+    image: myoung34/github-runner:2.336.0
+    restart: unless-stopped
+    environment:
+      REPO_URL: ${REPO_URL}
+      RUNNER_SCOPE: repo
+      RUNNER_TOKEN: ${RUNNER_TOKEN}
+      RUNNER_NAME: ${RUNNER_NAME_PREFIX:-coolify}-1
+      LABELS: ${RUNNER_LABELS:-etched-ci}
+      RUNNER_WORKDIR: /runner/work
+      CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /runner/config
+      DISABLE_AUTOMATIC_DEREGISTRATION: "true"
+      UNSET_CONFIG_VARS: "true"
+    volumes:
+      - runner-1-data:/runner
+    healthcheck:
+      test: ["CMD-SHELL", "ps aux | grep '[R]unner.Listener' >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  runner-2:
+    image: myoung34/github-runner:2.336.0
+    restart: unless-stopped
+    environment:
+      REPO_URL: ${REPO_URL}
+      RUNNER_SCOPE: repo
+      RUNNER_TOKEN: ${RUNNER_TOKEN}
+      RUNNER_NAME: ${RUNNER_NAME_PREFIX:-coolify}-2
+      LABELS: ${RUNNER_LABELS:-etched-ci}
+      RUNNER_WORKDIR: /runner/work
+      CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /runner/config
+      DISABLE_AUTOMATIC_DEREGISTRATION: "true"
+      UNSET_CONFIG_VARS: "true"
+    volumes:
+      - runner-2-data:/runner
+    healthcheck:
+      test: ["CMD-SHELL", "ps aux | grep '[R]unner.Listener' >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  runner-1-data:
+  runner-2-data:

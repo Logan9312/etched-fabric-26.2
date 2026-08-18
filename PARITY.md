@@ -17,7 +17,7 @@ Status values:
 | Subsystem | Status | Evidence / remaining work |
 | --- | --- | --- |
 | Fabric 26.2 build and metadata | automated verified | Java 25, Fabric Loader 0.19.3 and Fabric API 0.156.0+26.2. `clean build` runs `parityTest` and packages successfully. |
-| Registries and initialization | launch verified | Registry IDs and counts match upstream: 3 blocks, 2 block entities, 10 items, 1 entity, 5 menus, 7 components, 3 recipe serializers, 1 sound, 1 POI and 1 profession. Both Fabric launch paths initialize; full dedicated world load remains pending. |
+| Registries and initialization | automated verified | Registry IDs and counts match upstream: 3 blocks, 2 block entities, 10 items, 1 entity, 5 menus, 7 components, 3 recipe serializers, 1 sound, 1 POI and 1 profession. Server GameTests place all three blocks, verify both block entities, and spawn/tick the jukebox minecart. |
 | Runtime resources | automated verified | All JSON parses; all bard trade tags resolve to checked-in trade files; vanilla recipe ingredients use Minecraft 26.2 string/tag syntax. Upstream assets/data are otherwise byte-equivalent after accounting for required 26.2 item definitions and GUI-sprite relocation. A fresh in-world reload remains a manual release check. |
 | Data components and codecs | automated verified | Persistent and direct-buffer network round trips cover track data, music tracks, labels, every disc pattern and paused state. Registry-aware ItemStack components still require world/save fixtures. The paused codec retains upstream unit-form compatibility. |
 | Custom discs and labels | launch verified | 26.2 custom tint sources and a select-model property restore all six patterns plus disc/primary/secondary component colors. The definitions decode during a real client resource reload; craft each combination for final visual comparison. |
@@ -28,7 +28,7 @@ Status values:
 | Boombox | implemented | Menu, playback state and player synchronization are present. Entity-music packet storage tails round-trip automatically, and the playing arm pose is restored after attack animation. Two-client playback and a visual pose check remain. |
 | Radio and portal radio | manual test needed | Streaming, menus, Nether item conversion and dimension behavior are present. Test URL validation, save/reload, redstone and portal conversion. |
 | Jukebox minecart | manual test needed | Entity, dispenser/item behavior, persistence, renderer and playback are present. Late-tracking playback/state synchronization is not proven. |
-| Bard profession and trades | implemented | Profession name key is corrected. Levels 1–5 now reference 26.2 data-driven trade sets reproducing upstream prices, quantities, direction, uses and XP; automated resource linkage and the unusual note-block purchase direction are checked. Actual offer generation needs an integrated-world test. |
+| Bard profession and trades | automated verified | Profession name key is corrected. Levels 1–5 reference 26.2 data-driven trade sets reproducing upstream prices, quantities, direction, uses and XP; resource linkage and the unusual note-block purchase direction are checked. A server GameTest also constructs the Bard work package through the live mixin path. Actual offer generation still needs an integrated-world test. |
 | Bard village houses | implemented | Server-start injection restores five normal and zombie village-pool additions with upstream weights and structures. Desert/savanna/snowy intentionally use `minecraft:empty` because upstream referenced a nonexistent `minecraft:bard_house` processor and silently skipped those normal houses. Integrated generation is not yet verified. |
 | Vanilla jukebox integration | manual test needed | Playable components, hopper behavior and stop/start hooks are present. Late join, chunk reload and save/restart behavior require two-client testing. |
 | Audio decoding and streaming | launch verified | OGG/WAV/MP3 decoder chain and streaming utilities match upstream; JLayer is bundled and OpenAL starts. Add deterministic local-HTTP fixture tests and natural-track-end tests. |
@@ -41,8 +41,8 @@ Status values:
 | Download/status HUD hue | launch verified | The animated overlay hue adjustment targets the 26.2 `Hud.extractOverlayMessage` path; the required mixin applies during client launch. Visual comparison remains. |
 | Sophisticated Core compatibility | deferred | Upstream integration classes require NeoForge-only APIs and are excluded. Packet layout no longer depends on whether a mod named `sophisticatedcore` is installed. Revisit only if a compatible Fabric 26.2 API exists. |
 | Fabric-native datagen | known gap | Runtime data is checked in and validated syntactically, but the retained NeoForge providers are excluded and cannot regenerate it. |
-| Dedicated-server startup | launch verified | Common initialization reaches the EULA gate without client-class leakage. EULA acceptance, full world readiness, save/restart and player join remain external/manual validation requirements. |
-| Automated regression suite | implemented | `parityTest` covers packet-tail symmetry, core component persistence/network round trips, item-model invariants, full JSON syntax, bard trade counts/linkage and required common-tag presence. GameTests, client rendering tests and registry-aware ItemStack/payload fixtures remain. |
+| Dedicated-server startup | automated verified | The server GameTest runner accepts the EULA, loads recipes/advancements, reaches world readiness, executes live ticks and shuts down cleanly. Save/restart and real player join remain external/manual validation requirements. |
+| Automated regression suite | automated verified | `build` runs packet/component/resource parity checks plus server GameTests that audit every server mixin, spawn and tick a villager, exercise the Bard work-package mixin, place every Etched block/block entity and tick the custom minecart. A production client GameTest audits client mixins, completes resource reload and world join, renders frames, and captures a screenshot on the self-hosted `etched-ci` runners. Registry-aware ItemStack/payload fixtures and multi-client scenarios remain. |
 
 ## Audit findings fixed in alpha.4 and alpha.5
 
@@ -69,6 +69,6 @@ Status values:
 3. Verify album-cover grindstone removal and all album/boombox menu-vs-direct-interaction configuration modes.
 4. Spawn and level a bard through levels 1–5; inspect offers and locate each village house type.
 5. Exercise OGG, WAV, MP3, playlist, loop and natural-end advancement using deterministic local fixtures.
-6. Run a dedicated server through world-ready, save, stop and restart, then join with two clients.
+6. Save and restart a dedicated world, then join with two real clients.
 7. Test late tracking, chunk unload/reload and reconnect for jukeboxes, minecarts, boomboxes, radios and album jukeboxes.
 8. Visually verify all disc patterns/colors, label colors, downloaded album covers, boombox poses and both parrot smoothing modes.

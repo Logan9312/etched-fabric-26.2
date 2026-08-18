@@ -19,6 +19,16 @@ loom {
 	}
 }
 
+fabricApi {
+	configureTests {
+		createSourceSet = true
+		modId = "etched-gametest"
+		enableGameTests = true
+		enableClientGameTests = true
+		eula = true
+	}
+}
+
 sourceSets.main.java {
 	// Runtime resources are checked in. The NeoForge datagen providers are kept
 	// as porting references until Fabric-native providers replace them.
@@ -34,6 +44,8 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+	productionRuntimeMods "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	include implementation("javazoom:jlayer:1.0.1")
 	implementation "commons-io:commons-io:2.18.0"
@@ -56,7 +68,13 @@ tasks.register('parityTest', JavaExec) {
 }
 
 test {
+	useJUnitPlatform()
 	failOnNoDiscoveredTests = false
+}
+
+tasks.register("runProductionClientGameTest", net.fabricmc.loom.task.prod.ClientProductionRunTask) {
+	jvmArgs.addAll("-Dfabric.client.gametest", "-Dfabric.client.gametest.disableNetworkSynchronizer=true")
+	useXVFB = true
 }
 
 check.dependsOn parityTest
