@@ -3,9 +3,7 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.2,
-  "ingredient": {
-    "tag": "c:music_discs"
-  },
+  "ingredient": "#c:music_discs",
   "result": {
     "count": 1,
     "id": "etched:blank_music_disc"

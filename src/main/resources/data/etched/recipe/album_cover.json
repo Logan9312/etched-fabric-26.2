@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "M": {
-      "item": "etched:music_label"
-    },
-    "P": {
-      "tag": "c:paper"
-    }
+    "M": "etched:music_label",
+    "P": "#c:paper"
   },
   "pattern": [
     "PPP",

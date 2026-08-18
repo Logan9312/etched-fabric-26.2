@@ -32,7 +32,7 @@ public class SoundCloudSource implements SoundDownloadSource {
 
     private final Map<String, Boolean> validCache = new WeakHashMap<>();
 
-    private static URL appendUri(String uri, String appendQuery) throws Exception {
+    private static URL appendUri(String uri, String appendQuery) throws URISyntaxException, MalformedURLException {
         URI oldUri = new URI(uri);
         return new URI(oldUri.getScheme(), oldUri.getAuthority(), oldUri.getPath(), oldUri.getQuery() == null ? appendQuery : oldUri.getQuery() + "&" + appendQuery, oldUri.getFragment()).toURL();
     }
@@ -99,6 +99,7 @@ public class SoundCloudSource implements SoundDownloadSource {
                 progressListener.progressStartRequest(RESOLVING_TRACKS);
             }
             JsonArray media = GsonHelper.getAsJsonArray(GsonHelper.getAsJsonObject(json, "media"), "transcodings");
+            String trackAuthorization = GsonHelper.getAsString(json, "track_authorization", null);
 
             Map<Format, String> urls = new EnumMap<>(Format.class);
             for (int i = 0; i < media.size(); i++) {
@@ -112,9 +113,19 @@ public class SoundCloudSource implements SoundDownloadSource {
                 urls.put(format, GsonHelper.getAsString(transcodingJson, "url"));
             }
 
+            IOException lastFailure = null;
             for (Format format : Format.FORMATS) {
                 String dataUrl = urls.get(format);
                 if (dataUrl == null) {
+                    continue;
+                }
+
+                try {
+                    if (trackAuthorization != null) {
+                        dataUrl = appendUri(dataUrl, "track_authorization=" + URLEncoder.encode(trackAuthorization, StandardCharsets.UTF_8)).toString();
+                    }
+                } catch (URISyntaxException | MalformedURLException exception) {
+                    lastFailure = new IOException("Invalid SoundCloud transcoding URL", exception);
                     continue;
                 }
 
@@ -127,9 +138,17 @@ public class SoundCloudSource implements SoundDownloadSource {
                     } else {
                         return Collections.singletonList(new URI(GsonHelper.getAsString(urlJson, "url")).toURL());
                     }
+                } catch (IOException | URISyntaxException | JsonParseException exception) {
+                    lastFailure = exception instanceof IOException ioException
+                            ? ioException
+                            : new IOException("Invalid SoundCloud transcoding response", exception);
+                    LOGGER.debug("SoundCloud {} transcoding failed; trying the next supported format", format, exception);
                 }
             }
 
+            if (lastFailure != null) {
+                throw new IOException("All supported SoundCloud audio sources failed", lastFailure);
+            }
             throw new IOException("Could not find an audio source");
         });
     }

@@ -18,7 +18,7 @@ Status values:
 | --- | --- | --- |
 | Fabric 26.2 build and metadata | automated verified | Java 25, Fabric Loader 0.19.3 and Fabric API 0.156.0+26.2. `clean build` runs `parityTest` and packages successfully. |
 | Registries and initialization | launch verified | Registry IDs and counts match upstream: 3 blocks, 2 block entities, 10 items, 1 entity, 5 menus, 7 components, 3 recipe serializers, 1 sound, 1 POI and 1 profession. Both Fabric launch paths initialize; full dedicated world load remains pending. |
-| Runtime resources | automated verified | All JSON parses; all bard trade tags resolve to checked-in trade files. Upstream assets/data are otherwise byte-equivalent after accounting for required 26.2 item definitions and GUI-sprite relocation. Minecraft datapack codec/world-load validation remains pending. |
+| Runtime resources | automated verified | All JSON parses; all bard trade tags resolve to checked-in trade files; vanilla recipe ingredients use Minecraft 26.2 string/tag syntax. Upstream assets/data are otherwise byte-equivalent after accounting for required 26.2 item definitions and GUI-sprite relocation. A fresh in-world reload remains a manual release check. |
 | Data components and codecs | automated verified | Persistent and direct-buffer network round trips cover track data, music tracks, labels, every disc pattern and paused state. Registry-aware ItemStack components still require world/save fixtures. The paused codec retains upstream unit-form compatibility. |
 | Custom discs and labels | launch verified | 26.2 custom tint sources and a select-model property restore all six patterns plus disc/primary/secondary component colors. The definitions decode during a real client resource reload; craft each combination for final visual comparison. |
 | Etching table | manual test needed | Block, menu, screen, URL lookup and recipe flow are present. Client launch proves its screen resources load; complete etching and invalid-URL flows need gameplay tests. |
@@ -32,7 +32,7 @@ Status values:
 | Bard village houses | implemented | Server-start injection restores five normal and zombie village-pool additions with upstream weights and structures. Desert/savanna/snowy intentionally use `minecraft:empty` because upstream referenced a nonexistent `minecraft:bard_house` processor and silently skipped those normal houses. Integrated generation is not yet verified. |
 | Vanilla jukebox integration | manual test needed | Playable components, hopper behavior and stop/start hooks are present. Late join, chunk reload and save/restart behavior require two-client testing. |
 | Audio decoding and streaming | launch verified | OGG/WAV/MP3 decoder chain and streaming utilities match upstream; JLayer is bundled and OpenAL starts. Add deterministic local-HTTP fixture tests and natural-track-end tests. |
-| SoundCloud and Bandcamp | implemented | Resolver/request logic is retained. Add fixture tests and opt-in live smoke tests because provider markup and client IDs can change. |
+| SoundCloud and Bandcamp | implemented | Resolver/request logic is retained. SoundCloud now forwards per-track authorization and falls through failed transcoding candidates. DRM/encrypted-only tracks remain unsupported; use an upload exposing a standard MP3/HLS stream. Add fixture tests and opt-in live smoke tests because provider markup and client IDs can change. |
 | Sound and artwork caches | implemented | Fabric tick/disconnect/reload lifecycle replaces NeoForge events. Add hit, expiry, no-store, stale-error and size-cap tests. |
 | Networking | automated verified | Payload registrations and directions are present. Block/entity optional storage UUID tails now use an unconditional wire schema; START/RESTART optional tails and STOP canonicalization are checked by `parityTest`. Full payload and two-client coverage remains pending. Use the same release on clients and servers because the post-alpha.3 wire schema intentionally changed. |
 | Music-disc cloning | implemented | Recipe now checks `c:music_discs`, matching the upstream common tag and the checked-in Etched disc tag. Add a crafting GameTest proving component preservation and remaining items. |
@@ -44,7 +44,7 @@ Status values:
 | Dedicated-server startup | launch verified | Common initialization reaches the EULA gate without client-class leakage. EULA acceptance, full world readiness, save/restart and player join remain external/manual validation requirements. |
 | Automated regression suite | implemented | `parityTest` covers packet-tail symmetry, core component persistence/network round trips, item-model invariants, full JSON syntax, bard trade counts/linkage and required common-tag presence. GameTests, client rendering tests and registry-aware ItemStack/payload fixtures remain. |
 
-## Audit findings fixed in alpha.4
+## Audit findings fixed in alpha.4 and alpha.5
 
 - Fixed asymmetric entity-music decoding that read a presence byte the encoder omitted when Sophisticated Core was absent.
 - Made block/entity optional storage UUID wire layouts unconditional and loader-independent.
@@ -59,6 +59,8 @@ Status values:
 - Restored the animated download/status HUD hue on Minecraft 26.2's extracted HUD path.
 - Corrected two-color music-label persistence so the complete representation is encoded while legacy one-color data still decodes.
 - Added repeatable packet and resource regression checks to the normal Gradle `check`/`build` lifecycle.
+- Alpha.5 migrates all eight rejected vanilla recipes to Minecraft 26.2 ingredient syntax and prevents legacy ingredient objects from returning.
+- Alpha.5 forwards SoundCloud track authorization and continues past a dead progressive/HLS candidate.
 
 ## Required manual/runtime scenarios
 
