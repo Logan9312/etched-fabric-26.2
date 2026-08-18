@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import gg.moonflower.etched.test.ResourceParityCheck;
 import gg.moonflower.etched.test.ComponentCodecParityCheck;
+import gg.moonflower.etched.test.MixinTargetParityCheck;
 
 public final class PacketCodecParityCheck {
     private PacketCodecParityCheck() {
@@ -33,6 +34,7 @@ public final class PacketCodecParityCheck {
         roundTripConfig(true, true);
         ComponentCodecParityCheck.run();
         ResourceParityCheck.run();
+        MixinTargetParityCheck.run();
     }
 
     private static void roundTripEntity(ClientboundPlayEntityMusicPacket.Action action, UUID storageId) {
