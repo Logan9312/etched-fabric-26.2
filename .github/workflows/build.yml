@@ -47,6 +47,10 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: [self-hosted, Linux, X64, etched-ci]
     timeout-minutes: 20
+    env:
+      # OpenAL's null backend exercises sound-engine initialization on a
+      # headless runner without requiring a physical sound card.
+      ALSOFT_DRIVERS: "null"
     steps:
       - name: checkout repository
         uses: actions/checkout@v6
@@ -66,7 +70,9 @@ jobs:
           fi
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
-      - name: run production client game tests
+      - name: run client game tests
+        run: ./gradlew runClientGameTest
+      - name: smoke test the production jar
         run: ./gradlew runProductionClientGameTest
       - name: capture client test evidence
         if: always()

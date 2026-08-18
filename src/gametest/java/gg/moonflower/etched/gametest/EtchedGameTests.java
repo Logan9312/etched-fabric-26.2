@@ -40,6 +40,17 @@ public final class EtchedGameTests implements CustomTestMethodInvoker {
 		});
 	}
 
+	@GameTest(maxTicks = 160)
+	public void villagerPopulationSurvivesExtendedAiTicks(GameTestHelper helper) {
+		var villagers = helper.spawn(EntityTypes.VILLAGER, new BlockPos(1, 1, 1), 32);
+		helper.runAfterDelay(100, () -> {
+			long survivors = villagers.stream().filter(Villager::isAlive).count();
+			helper.assertTrue(survivors == villagers.size(),
+					"Expected all 32 villagers to survive 100 AI ticks, but only " + survivors + " remained");
+			helper.succeed();
+		});
+	}
+
 	@GameTest
 	public void bardWorkPackageBuildsSuccessfully(GameTestHelper helper) {
 		var bardKey = ResourceKey.create(Registries.VILLAGER_PROFESSION, EtchedVillagers.BARD.getId());
