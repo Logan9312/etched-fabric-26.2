@@ -62,7 +62,7 @@ jobs:
         run: |
           if ! command -v xvfb-run >/dev/null 2>&1; then
             apt-get update
-            DEBIAN_FRONTEND=noninteractive apt-get install -y xvfb xauth libgl1 libglx-mesa0 libasound2t64
+            DEBIAN_FRONTEND=noninteractive apt-get install -y xvfb xauth libgl1 libglx-mesa0 libasound2
           fi
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
