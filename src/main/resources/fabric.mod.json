@@ -3,7 +3,7 @@
   "id": "etched",
   "version": "${version}",
   "name": "Etched Fabric",
-  "description": "A private Fabric 26.2 port of Etched 5.1.0.",
+  "description": "A private Fabric 26.3 port of Etched 5.1.0.",
   "authors": ["Ocelot", "Jackson", "Farcr (Art)", "AstraZoey (Sound Design)"],
   "contributors": ["Logan9312 (Fabric 26.2 port)"],
   "contact": {
@@ -19,9 +19,9 @@
   },
   "mixins": ["etched.mixins.json"],
   "depends": {
-    "fabricloader": ">=0.19.3",
+    "fabricloader": ">=0.19.5",
     "fabric-api": "*",
     "java": ">=25",
-    "minecraft": "~26.2"
+    "minecraft": "~26.3"
   }
 }

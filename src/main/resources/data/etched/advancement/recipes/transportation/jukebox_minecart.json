@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "etched:jukebox_minecart"
+        "recipes": "etched:jukebox_minecart"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

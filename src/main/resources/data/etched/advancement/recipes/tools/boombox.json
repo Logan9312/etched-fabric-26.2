@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "etched:boombox"
+        "recipes": "etched:boombox"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

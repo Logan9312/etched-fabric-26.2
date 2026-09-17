@@ -154,7 +154,7 @@ public class AlbumCoverItem extends Item implements ContainerItem {
             builder.clearContent();
             stack.set(EtchedComponents.ALBUM_COVER.get(), builder.build());
             if (player instanceof ServerPlayer) {
-                items.forEach(item -> player.drop(item, true));
+                items.forEach(item -> player.drop(item, true, net.minecraft.util.Prediction.SERVER_ONLY));
             }
 
             return true;

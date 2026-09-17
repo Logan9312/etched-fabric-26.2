@@ -1,26 +1,23 @@
-# Etched Fabric 26.2
+# Etched Fabric 26.3
 
-Private Fabric 26.2 port of [Etched 5.1.0](https://github.com/jacksonhardaway/etched).
+Private Fabric 26.3 port of [Etched 5.1.0](https://github.com/jacksonhardaway/etched).
 
 This repository targets behavioral parity with the upstream NeoForge release. The historical 1.19.2 Fabric implementation is used only as a loader-integration reference; Pollen is not carried forward.
 
 ## Status
 
-`alpha.3` is a private integration-test build. It compiles, packages, passes Fabric's
-dedicated-server bootstrap, and reaches the Minecraft client main menu with its resource
-pack and audio engine loaded. Core blocks, items, menus, components, recipes, networking,
-streaming sources, caches, jukebox integration, boombox, radio, album jukebox, and minecart
-code are present.
+`alpha.7` targets Minecraft 26.3. It passes the codec/resource checks, server GameTests,
+and client startup/mixin audit. Multiplayer playback still needs hands-on testing.
 
 This is not yet a claim of perfect 1:1 parity. Dynamic downloaded album artwork, custom
-disc/label tint rendering, bard trades and village-pool injection need further 26.2 work,
+disc/label tint rendering, bard trades and village-pool injection need further parity work,
 and multiplayer gameplay still needs hands-on testing. See [PARITY.md](PARITY.md).
 
 ## Requirements
 
-- Minecraft 26.2
-- Fabric Loader 0.19.3+
-- Fabric API 0.156.0+26.2
+- Minecraft 26.3
+- Fabric Loader 0.19.5+
+- Fabric API 0.160.7+26.3
 - Java 25
 
 ## Build

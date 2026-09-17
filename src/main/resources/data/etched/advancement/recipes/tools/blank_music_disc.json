@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "etched:blank_music_disc"
+        "recipes": "etched:blank_music_disc"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

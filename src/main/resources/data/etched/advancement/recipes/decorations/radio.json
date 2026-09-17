@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "etched:radio"
+        "recipes": "etched:radio"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

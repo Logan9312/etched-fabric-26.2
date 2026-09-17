@@ -62,12 +62,8 @@ public final class AlbumCoverSpecialRenderer implements SpecialModelRenderer<Alb
     public void submit(CoverArgument argument, PoseStack poseStack, SubmitNodeCollector collector, int packedLight,
                        int packedOverlay, boolean foil, int outlineColor) {
         Identifier texture = this.resolveTexture(argument);
-        collector.submitCustomGeometry(poseStack, RenderTypes.itemCutout(texture),
+        collector.submitCustomGeometry(poseStack, foil ? RenderTypes.itemCutoutGlint(texture) : RenderTypes.itemCutout(texture),
                 (pose, vertices) -> renderSquare(pose, vertices, packedLight, packedOverlay));
-        if (foil) {
-            collector.order(1).submitCustomGeometry(poseStack, RenderTypes.glint(),
-                    (pose, vertices) -> renderSquare(pose, vertices, packedLight, packedOverlay));
-        }
     }
 
     private Identifier resolveTexture(CoverArgument argument) {

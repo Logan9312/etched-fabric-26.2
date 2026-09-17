@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "etched:album_cover"
+        "recipes": "etched:album_cover"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

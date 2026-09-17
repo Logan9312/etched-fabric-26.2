@@ -64,10 +64,11 @@ public class AbstractOnlineSoundInstance extends AbstractSoundInstance {
     }
 
     @Override
-    public WeighedSoundEvents resolve(SoundManager soundManager) {
+    public WeighedSoundEvents getOrResolve(SoundManager soundManager) {
         WeighedSoundEvents weighedSoundEvents = new WeighedSoundEvents(this.getIdentifier(), this.subtitle);
         weighedSoundEvents.addSound(new OnlineSound(this.getIdentifier(), this.url, this.attenuationDistance, this.progressListener, this.type, this.stereo));
         this.sound = weighedSoundEvents.getSound(this.random);
+        this.soundEvent = weighedSoundEvents;
         return weighedSoundEvents;
     }
 

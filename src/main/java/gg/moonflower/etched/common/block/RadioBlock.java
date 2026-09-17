@@ -1,6 +1,5 @@
 package gg.moonflower.etched.common.block;
 
-import com.mojang.serialization.MapCodec;
 import gg.moonflower.etched.common.blockentity.RadioBlockEntity;
 import gg.moonflower.etched.common.menu.RadioMenu;
 import gg.moonflower.etched.core.Etched;
@@ -48,8 +47,6 @@ import java.util.Map;
 
 public class RadioBlock extends BaseEntityBlock {
 
-    public static final MapCodec<RadioBlock> CODEC = simpleCodec(RadioBlock::new);
-
     public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION_16;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public static final BooleanProperty PORTAL = BooleanProperty.create("portal");
@@ -61,11 +58,6 @@ public class RadioBlock extends BaseEntityBlock {
     public RadioBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(ROTATION, 0).setValue(POWERED, false).setValue(PORTAL, false));
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

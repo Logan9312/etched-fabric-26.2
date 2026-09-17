@@ -50,8 +50,14 @@ public class StopListeningSound implements SoundInstance, SoundStopListener, Wra
 
     @Nullable
     @Override
-    public WeighedSoundEvents resolve(SoundManager soundManager) {
-        return this.source.resolve(soundManager);
+    public WeighedSoundEvents getOrResolve(SoundManager soundManager) {
+        return this.source.getOrResolve(soundManager);
+    }
+
+    @Nullable
+    @Override
+    public WeighedSoundEvents getSoundEvent() {
+        return this.source.getSoundEvent();
     }
 
     @Override

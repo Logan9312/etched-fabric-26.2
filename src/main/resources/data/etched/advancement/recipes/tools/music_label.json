@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "etched:music_label"
+        "recipes": "etched:music_label"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

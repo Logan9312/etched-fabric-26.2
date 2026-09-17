@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "etched:etching_table"
+        "recipes": "etched:etching_table"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

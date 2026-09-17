@@ -18,7 +18,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static com.mojang.blaze3d.platform.InputConstants.KEY_ESCAPE;
 
 /**
  * @author Ocelot
@@ -64,7 +64,7 @@ public class RadioScreen extends AbstractContainerScreen<RadioMenu> implements U
 
     @Override
     public boolean keyPressed(KeyEvent event) {
-        return this.url.keyPressed(event) || (this.url.isFocused() && this.url.isVisible() && event.key() != GLFW_KEY_ESCAPE) || super.keyPressed(event);
+        return this.url.keyPressed(event) || (this.url.isFocused() && this.url.isVisible() && event.key() != KEY_ESCAPE) || super.keyPressed(event);
     }
 
     @Override

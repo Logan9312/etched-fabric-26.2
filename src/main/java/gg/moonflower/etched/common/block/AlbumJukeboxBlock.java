@@ -1,6 +1,5 @@
 package gg.moonflower.etched.common.block;
 
-import com.mojang.serialization.MapCodec;
 import gg.moonflower.etched.common.blockentity.AlbumJukeboxBlockEntity;
 import gg.moonflower.etched.core.mixin.client.render.LevelRendererAccessor;
 import gg.moonflower.etched.client.LevelEventAccess;
@@ -41,8 +40,6 @@ import java.util.Map;
  */
 public class AlbumJukeboxBlock extends BaseEntityBlock {
 
-    public static final MapCodec<AlbumJukeboxBlock> CODEC = simpleCodec(AlbumJukeboxBlock::new);
-
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty HAS_RECORD = BlockStateProperties.HAS_RECORD;
@@ -50,11 +47,6 @@ public class AlbumJukeboxBlock extends BaseEntityBlock {
     public AlbumJukeboxBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(POWERED, false).setValue(HAS_RECORD, false));
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override
