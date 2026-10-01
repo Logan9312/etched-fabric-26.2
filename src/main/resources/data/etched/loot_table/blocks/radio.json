@@ -9,15 +9,13 @@
           "children": [
             {
               "type": "minecraft:item",
-              "conditions": [
-                {
-                  "block": "etched:radio",
-                  "condition": "minecraft:block_state_property",
-                  "properties": {
-                    "portal": "true"
-                  }
+              "condition": {
+                "blocks": "etched:radio",
+                "type": "minecraft:match_block",
+                "state": {
+                  "portal": "true"
                 }
-              ],
+              },
               "name": "etched:portal_radio"
             },
             {
@@ -25,11 +23,9 @@
               "name": "etched:radio"
             }
           ],
-          "conditions": [
-            {
-              "condition": "minecraft:survives_explosion"
-            }
-          ]
+          "condition": {
+            "type": "minecraft:survives_explosion"
+          }
         }
       ],
       "rolls": 1.0

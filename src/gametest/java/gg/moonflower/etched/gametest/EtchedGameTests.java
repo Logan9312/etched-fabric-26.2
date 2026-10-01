@@ -17,12 +17,51 @@ import org.spongepowered.asm.mixin.MixinEnvironment;
 
 import gg.moonflower.etched.common.blockentity.AlbumJukeboxBlockEntity;
 import gg.moonflower.etched.common.blockentity.RadioBlockEntity;
+import gg.moonflower.etched.common.block.RadioBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import gg.moonflower.etched.common.entity.MinecartJukebox;
 import gg.moonflower.etched.core.registry.EtchedBlocks;
 import gg.moonflower.etched.core.registry.EtchedEntities;
 import gg.moonflower.etched.core.registry.EtchedVillagers;
 
 public final class EtchedGameTests implements CustomTestMethodInvoker {
+	@GameTest
+	public void blockDropsRespectExplosionSurvival(GameTestHelper helper) {
+		var states = java.util.List.of(
+				EtchedBlocks.ETCHING_TABLE.get().defaultBlockState(),
+				EtchedBlocks.ALBUM_JUKEBOX.get().defaultBlockState(),
+				EtchedBlocks.RADIO.get().defaultBlockState(),
+				EtchedBlocks.RADIO.get().defaultBlockState().setValue(RadioBlock.PORTAL, true));
+		for (var state : states) {
+			var params = new LootParams.Builder(helper.getLevel())
+					.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(helper.absolutePos(new BlockPos(1, 1, 1))))
+					.withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
+					.withParameter(LootContextParams.EXPLOSION_RADIUS, Float.MAX_VALUE);
+			boolean suppressed = false;
+			for (int attempt = 0; attempt < 16; attempt++) {
+				suppressed |= state.getDrops(params).isEmpty();
+			}
+			helper.assertTrue(suppressed, "Explosion survival condition was ignored for " + state);
+		}
+		helper.succeed();
+	}
+
+	@GameTest
+	public void radioDropsMatchPortalState(GameTestHelper helper) {
+		for (boolean portal : new boolean[]{false, true}) {
+			var state = EtchedBlocks.RADIO.get().defaultBlockState().setValue(RadioBlock.PORTAL, portal);
+			var drops = Block.getDrops(state, helper.getLevel(), helper.absolutePos(new BlockPos(1, 1, 1)), null);
+			var expected = portal ? EtchedBlocks.PORTAL_RADIO_ITEM.get() : EtchedBlocks.RADIO.get().asItem();
+			helper.assertTrue(drops.size() == 1 && drops.getFirst().is(expected) && drops.getFirst().getCount() == 1,
+					"Radio with portal=" + portal + " must drop exactly its own item; got " + drops);
+		}
+		helper.succeed();
+	}
+
 	@GameTest
 	public void auditServerMixins(GameTestHelper helper) {
 		MixinEnvironment.getCurrentEnvironment().audit();
