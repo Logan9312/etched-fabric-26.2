@@ -50,7 +50,7 @@ dependencies {
 	include implementation("javazoom:jlayer:1.0.1")
 	implementation "commons-io:commons-io:2.18.0"
 	implementation "commons-codec:commons-codec:1.17.2"
-	implementation "org.apache.commons:commons-lang3:3.17.0"
+	implementation "org.apache.commons:commons-lang3:3.18.0"
 }
 
 tasks.register('parityTest', JavaExec) {
